@@ -25,6 +25,8 @@ import com.tsp.ui.EmptyDrawer;
 
 public class Main {
 
+    private final static int NUMBER_OF_PATHS = 1;
+
     private final static String SIMPLE_ALGO = "simple";
     private final static String LOCAL_DETERMINED_SEARCH_ALGO = "lds";
 
@@ -38,7 +40,7 @@ public class Main {
             ParserConfigurationException {
         final Algorithm algorithm = algorithms.get(SIMPLE_ALGO);
         final Drawer drawer = new EmptyDrawer();
-        final PathFactory factory = new RoundedFactory();
+        final PathFactory factory = new RoundedFactory(NUMBER_OF_PATHS);
 
         final ComputationCallback drawCallback = new ComputationCallback() {
 

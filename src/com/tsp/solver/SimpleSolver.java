@@ -24,13 +24,25 @@ public class SimpleSolver implements Solver {
     @Override
     public void solve(PathFactory factory) {
         final long startTime = System.currentTimeMillis();
-        final Path bestPath = algorithm.compute(tsp, factory.create(tsp),
-                callback);
-        final long time = System.currentTimeMillis() - startTime;
-        final double bestCost = bestPath.cost(tsp);
-        final int eps = (int) (100 * (bestCost - tsp.getOptimal()) / tsp
-                .getOptimal());
-        System.out.println(String.format(FORMAT, tsp.getName(), bestCost, eps,
-                time));
+        double bestCost = Double.MAX_VALUE;
+        Path bestPath;
+        long bestPathTime = 0;
+        int bestEps = 0;
+
+        for (Path startPath : factory.create(tsp)) {
+            Path path = algorithm.compute(tsp, startPath, callback);
+            final long currentTime = System.currentTimeMillis() - startTime;
+            double cost = path.cost(tsp);
+            if (cost < bestCost) {
+                bestPath = path;
+                bestCost = cost;
+                bestPathTime = currentTime;
+                bestEps = (int) (100 * (bestCost - tsp.getOptimal()) / tsp
+                        .getOptimal());
+            }
+        }
+        System.out.println(String.format(FORMAT, tsp.getName(), bestCost, bestEps,
+                bestPathTime));
+        // TODO use bestPath to fill the table sheets
     }
 }
