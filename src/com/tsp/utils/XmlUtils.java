@@ -11,4 +11,8 @@ public final class XmlUtils {
         return element.getElementsByTagName(tag).item(0).getTextContent();
     }
 
+    public static String xmlForName(String name) {
+        return "data/" + name + ".xml";
+    }
+
 }

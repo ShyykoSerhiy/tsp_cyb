@@ -2,7 +2,9 @@ package com.tsp;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
@@ -24,6 +26,11 @@ import com.tsp.ui.Drawer;
 import com.tsp.ui.EmptyDrawer;
 
 public class Main {
+
+    public final static String[] xmlNames = {
+            "br17", "bays29", "ftv33", "ftv35", "swiss42", "p43", "ftv44", "ftv47", "att48",
+            "ry48p", "eil51", "berlin52", "ft53", "ftv55", "ftv64", "eil76", "eil101"
+    };
 
     private final static int NUMBER_OF_PATHS = 1;
 
@@ -52,24 +59,14 @@ public class Main {
 
         };
 
-        final Solver solver = new CompoundSolver(
-                new SimpleSolver(TSPInstance.fromXml("data/br17.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/bays29.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv33.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv35.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/swiss42.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/p43.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv44.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv47.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/att48.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ry48p.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/eil51.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/berlin52.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ft53.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv55.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/ftv64.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/eil76.xml"), algorithm, drawCallback),
-                new SimpleSolver(TSPInstance.fromXml("data/eil101.xml"), algorithm, drawCallback));
+        // create list of solvers for all problem definitions
+        List<Solver> solvers = new ArrayList<Solver>(xmlNames.length);
+        for (String xmlName : xmlNames) {
+            solvers.add(new SimpleSolver(TSPInstance.fromXml(xmlName), algorithm, drawCallback));
+        }
+
+        // pack everything in one compound solver
+        final Solver solver = new CompoundSolver(solvers.toArray(new Solver[solvers.size()]));
 
         new Thread(new Runnable() {
 

@@ -53,11 +53,11 @@ public class TSPInstance {
         return optimal;
     }
 
-    public static TSPInstance fromXml(String xml) throws SAXException,
+    public static TSPInstance fromXml(String xmlName) throws SAXException,
             IOException, ParserConfigurationException {
         InputStream xmlStream = null;
         try {
-            xmlStream = new FileInputStream(xml);
+            xmlStream = new FileInputStream(XmlUtils.xmlForName(xmlName));
             final Document document = DocumentBuilderFactory.newInstance()
                     .newDocumentBuilder().parse(xmlStream);
             final Element rootElement = document.getDocumentElement();
