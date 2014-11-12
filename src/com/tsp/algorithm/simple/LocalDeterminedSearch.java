@@ -4,11 +4,16 @@ import com.tsp.algorithm.Algorithm;
 import com.tsp.model.TSPInstance;
 import com.tsp.model.path.Path;
 
-public class SimpleAlgorithm implements Algorithm {
+/**
+ * local determined search algorithm as it was defined on original lections
+ */
+public class LocalDeterminedSearch implements Algorithm {
+    // maximum length between points that can be swapped
+    // can be tweaked to optimize algo
+    private static final int PARAM_P = 1;
 
     @Override
-    public Path compute(TSPInstance tsp, Path beginPath,
-            ComputationCallback callback) {
+    public Path compute(TSPInstance tsp, Path beginPath, ComputationCallback callback) {
         final int count = tsp.count();
         Path path = beginPath;
         // calculate path's cost
@@ -17,10 +22,11 @@ public class SimpleAlgorithm implements Algorithm {
         // looking for path improvements while possible
         while (pathChanged) {
             pathChanged = false;
-            // going through full table and trying to swap two points in path
-            for (int i = 1; i < count - 1 && !pathChanged; i++) {
-                for (int j = 1; j < count - 1 && !pathChanged; j++) {
-                    // create a copy of path to experiment with
+            // going through all the points in path
+            for (int i = 0; i < Math.max(count - PARAM_P, 1) && !pathChanged; i++) {
+                // and trying to swap with points that are no further than PARAM_P from current
+                for (int j = i + 1; j <= Math.min(i + PARAM_P, count - 1) && !pathChanged; j++) {
+                    // create a copy of path
                     final Path copy = path.clone();
                     // swap to points in path and measure cost
                     copy.swap(i, j);
@@ -37,5 +43,4 @@ public class SimpleAlgorithm implements Algorithm {
         }
         return path;
     }
-
 }

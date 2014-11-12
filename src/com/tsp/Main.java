@@ -2,9 +2,12 @@ package com.tsp;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.tsp.algorithm.simple.LocalDeterminedSearch;
 import org.xml.sax.SAXException;
 
 import com.tsp.algorithm.Algorithm;
@@ -22,9 +25,18 @@ import com.tsp.ui.EmptyDrawer;
 
 public class Main {
 
+    private final static String SIMPLE_ALGO = "simple";
+    private final static String LOCAL_DETERMINED_SEARCH_ALGO = "lds";
+
+    // all algorithms available
+    private final static Map<String, Algorithm> algorithms = new HashMap<String, Algorithm>() {{
+        put(SIMPLE_ALGO, new SimpleAlgorithm());
+        put(LOCAL_DETERMINED_SEARCH_ALGO, new LocalDeterminedSearch());
+    }};
+
     public static void main(String[] argc) throws FileNotFoundException, SAXException, IOException,
             ParserConfigurationException {
-        final Algorithm algorithm = new SimpleAlgorithm();
+        final Algorithm algorithm = algorithms.get(SIMPLE_ALGO);
         final Drawer drawer = new EmptyDrawer();
         final PathFactory factory = new RoundedFactory();
 
