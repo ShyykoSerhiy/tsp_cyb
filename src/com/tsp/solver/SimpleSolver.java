@@ -2,8 +2,9 @@ package com.tsp.solver;
 
 import com.tsp.algorithm.Algorithm;
 import com.tsp.algorithm.Algorithm.ComputationCallback;
-import com.tsp.model.Path;
 import com.tsp.model.TSPInstance;
+import com.tsp.model.path.Path;
+import com.tsp.model.path.PathFactory;
 
 public class SimpleSolver implements Solver {
 
@@ -21,9 +22,10 @@ public class SimpleSolver implements Solver {
     }
 
     @Override
-    public void solve() {
+    public void solve(PathFactory factory) {
         final long startTime = System.currentTimeMillis();
-        final Path bestPath = algorithm.compute(tsp, callback);
+        final Path bestPath = algorithm.compute(tsp, factory.create(tsp),
+                callback);
         final long time = System.currentTimeMillis() - startTime;
         final double bestCost = bestPath.cost(tsp);
         final int eps = (int) (100 * (bestCost - tsp.getOptimal()) / tsp

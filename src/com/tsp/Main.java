@@ -10,8 +10,10 @@ import org.xml.sax.SAXException;
 import com.tsp.algorithm.Algorithm;
 import com.tsp.algorithm.Algorithm.ComputationCallback;
 import com.tsp.algorithm.simple.SimpleAlgorithm;
-import com.tsp.model.Path;
 import com.tsp.model.TSPInstance;
+import com.tsp.model.path.Path;
+import com.tsp.model.path.PathFactory;
+import com.tsp.model.path.RoundedFactory;
 import com.tsp.solver.CompoundSolver;
 import com.tsp.solver.SimpleSolver;
 import com.tsp.solver.Solver;
@@ -20,10 +22,11 @@ import com.tsp.ui.EmptyDrawer;
 
 public class Main {
 
-    public static void main(String[] argc) throws FileNotFoundException,
-            SAXException, IOException, ParserConfigurationException {
+    public static void main(String[] argc) throws FileNotFoundException, SAXException, IOException,
+            ParserConfigurationException {
         final Algorithm algorithm = new SimpleAlgorithm();
         final Drawer drawer = new EmptyDrawer();
+        final PathFactory factory = new RoundedFactory();
 
         final ComputationCallback drawCallback = new ComputationCallback() {
 
@@ -34,7 +37,7 @@ public class Main {
             }
 
         };
-        
+
         final Solver solver = new CompoundSolver(
                 new SimpleSolver(TSPInstance.fromXml("data/br17.xml"), algorithm, drawCallback),
                 new SimpleSolver(TSPInstance.fromXml("data/bays29.xml"), algorithm, drawCallback),
@@ -55,10 +58,10 @@ public class Main {
                 new SimpleSolver(TSPInstance.fromXml("data/eil101.xml"), algorithm, drawCallback));
 
         new Thread(new Runnable() {
-            
+
             @Override
             public void run() {
-                solver.solve();
+                solver.solve(factory);
             }
 
         }).start();

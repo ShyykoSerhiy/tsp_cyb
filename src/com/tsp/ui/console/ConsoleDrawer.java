@@ -3,8 +3,8 @@ package com.tsp.ui.console;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 
-import com.tsp.model.Path;
 import com.tsp.model.TSPInstance;
+import com.tsp.model.path.Path;
 import com.tsp.ui.Drawer;
 
 public class ConsoleDrawer implements Drawer {

@@ -1,19 +1,25 @@
-package com.tsp.model;
+package com.tsp.model.path;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.tsp.model.TSPInstance;
+
 public class Path {
 
     private final List<Integer> data;
 
-    private Path() {
+    /* package */Path() {
         data = new LinkedList<Integer>();
     }
 
-    private Path(Path from) {
+    /* package */Path(Path from) {
         data = new LinkedList<Integer>(from.data);
+    }
+
+    /* package */void add(int edge) {
+        data.add(edge);
     }
 
     public void swap(int firstIndex, int secondIndex) {
@@ -28,6 +34,11 @@ public class Path {
         return data.size();
     }
 
+    @Override
+    public Path clone() {
+        return new Path(this);
+    }
+
     public double cost(TSPInstance tsp) {
         final int count = count();
         double cost = 0;
@@ -35,24 +46,6 @@ public class Path {
             cost += tsp.cost(data.get(i), data.get(i + 1));
         }
         return cost;
-    }
-
-    public static Path createRounded(int count, int start) {
-        final Path path = createSimple(count, start);
-        path.data.add(start);
-        return path;
-    }
-
-    public static Path createSimple(int count, int start) {
-        final Path path = new Path();
-        for (int i = 0; i < count; i++) {
-            path.data.add((i + start) % count);
-        }
-        return path;
-    }
-
-    public static Path copy(Path from) {
-        return new Path(from);
     }
 
 }

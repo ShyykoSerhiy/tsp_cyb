@@ -1,11 +1,11 @@
 package com.tsp.algorithm;
 
-import com.tsp.model.Path;
 import com.tsp.model.TSPInstance;
+import com.tsp.model.path.Path;
 
 public interface Algorithm {
 
-    Path compute(TSPInstance tsp, ComputationCallback callback);
+    Path compute(TSPInstance tsp, Path beginPath, ComputationCallback callback);
 
     interface ComputationCallback {
 

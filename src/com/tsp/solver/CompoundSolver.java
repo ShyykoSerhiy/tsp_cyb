@@ -1,5 +1,6 @@
 package com.tsp.solver;
 
+import com.tsp.model.path.PathFactory;
 
 public class CompoundSolver implements Solver {
 
@@ -10,9 +11,9 @@ public class CompoundSolver implements Solver {
     }
 
     @Override
-    public void solve() {
+    public void solve(PathFactory factory) {
         for (Solver solver : solvers) {
-            solver.solve();
+            solver.solve(factory);
         }
     }
 
