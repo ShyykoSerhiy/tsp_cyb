@@ -1,8 +1,11 @@
 package com.tsp.model;
 
+import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Scanner;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -20,11 +23,14 @@ public class TSPInstance {
     private final double[][] graph;
     private String name;
     private String description;
+    private double optimal;
 
-    private TSPInstance(double[][] graph, String name, String description) {
+    private TSPInstance(double[][] graph, String name, String description,
+            double optimal) {
         this.graph = graph;
         this.name = name;
         this.description = description;
+        this.optimal = optimal;
     }
 
     public int count() {
@@ -41,6 +47,10 @@ public class TSPInstance {
 
     public String getDescription() {
         return description;
+    }
+
+    public double getOptimal() {
+        return optimal;
     }
 
     public static TSPInstance fromXml(String xml) throws SAXException,
@@ -69,14 +79,31 @@ public class TSPInstance {
                 }
             }
 
-            return new TSPInstance(graph, XmlUtils.getTextContent(rootElement,
-                    "name"),
-                    XmlUtils.getTextContent(rootElement, "description"));
+            final String name = XmlUtils.getTextContent(rootElement, "name");
+            final String description = XmlUtils.getTextContent(rootElement,
+                    "description");
+            return new TSPInstance(graph, name, description,
+                    getOptimalSolution(name));
         } finally {
             if (xmlStream != null) {
                 xmlStream.close();
             }
         }
-
     }
+
+    private static double getOptimalSolution(String name)
+            throws FileNotFoundException {
+        final Scanner scanner = new Scanner(new File("data/optimal.txt"));
+        while (scanner.hasNextLine()) {
+            final String[] line = scanner.nextLine().split(": ");
+            if (name.equals(line[0])) {
+                scanner.close();
+                return Integer.parseInt(line[1]);
+            }
+        }
+        scanner.close();
+        throw new IllegalArgumentException("No optimal solution found for "
+                + name);
+    }
+
 }

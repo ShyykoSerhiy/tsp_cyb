@@ -7,7 +7,7 @@ import com.tsp.model.TSPInstance;
 public class SimpleAlgorithm implements Algorithm {
 
     @Override
-    public void compute(TSPInstance tsp, ComputationCallback callback) {
+    public Path compute(TSPInstance tsp, ComputationCallback callback) {
         double bestCost = Double.MAX_VALUE;
         Path bestPath = null;
         for (int k = 0; k < tsp.count(); k++) {
@@ -19,7 +19,7 @@ public class SimpleAlgorithm implements Algorithm {
             }
             callback.onComputation(tsp, kPath);
         }
-        callback.onComputation(tsp, bestPath);
+        return bestPath;
     }
 
     private Path getBest(TSPInstance tsp, int start) {
