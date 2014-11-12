@@ -14,6 +14,12 @@ public class RoundedFactory implements PathFactory {
         this.startIndex = startIndex;
     }
 
+    /**
+     * Creates path that goes through all points one by one in order they appear in problem
+     * definition and returns to start point
+     * @param tsp problem definition
+     * @return resulting {@link com.tsp.model.path.Path}
+     */
     @Override
     public Path create(TSPInstance tsp) {
         final int count = tsp.count();
