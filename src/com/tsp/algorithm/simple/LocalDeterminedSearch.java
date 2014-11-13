@@ -19,16 +19,23 @@ public class LocalDeterminedSearch implements Algorithm {
         // calculate path's cost
         double cost = path.cost(tsp);
         boolean pathChanged = true;
+        // margins of area around vertex to look for swap
+        int delta_left, delta_right;
         // looking for path improvements while possible
         while (pathChanged) {
             pathChanged = false;
             // going through all the points in path
             for (int i = 0; i < Math.max(count - PARAM_P, 1) && !pathChanged; i++) {
                 // and trying to swap with points that are no further than PARAM_P from current
-                for (int j = i + 1; j <= Math.min(i + PARAM_P, count - 1) && !pathChanged; j++) {
+                delta_left = i + 1;//optimized from Math.max(i - PARAM_P, 0);
+                delta_right = Math.min(i + PARAM_P, count - 1);
+                for (int j = delta_left; j <= delta_right && !pathChanged; j++) {
+                    if (i == j) {
+                        continue;
+                    }
                     // create a copy of path
                     final Path copy = path.clone();
-                    // swap to points in path and measure cost
+                    // swap two points in path and measure cost
                     copy.swap(i, j);
                     final double copyCost = copy.cost(tsp);
                     if (copyCost < cost) {
