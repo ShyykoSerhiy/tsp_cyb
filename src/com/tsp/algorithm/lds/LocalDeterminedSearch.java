@@ -52,4 +52,5 @@ public class LocalDeterminedSearch implements Algorithm {
         }
         return path;
     }
+
 }

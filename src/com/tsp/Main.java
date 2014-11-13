@@ -1,8 +1,14 @@
 package com.tsp;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.xml.parsers.ParserConfigurationException;
 
@@ -13,6 +19,7 @@ import com.tsp.algorithm.Algorithm.ComputationCallback;
 import com.tsp.algorithm.lds.LocalDeterminedSearch;
 import com.tsp.algorithm.simple.SimpleAlgorithm;
 import com.tsp.model.TSPInstance;
+import com.tsp.model.path.DefinedPathFactory;
 import com.tsp.model.path.Path;
 import com.tsp.model.path.PathFactory;
 import com.tsp.model.path.RoundedFactory;
@@ -21,6 +28,7 @@ import com.tsp.solver.SimpleSolver;
 import com.tsp.solver.SolverResult;
 import com.tsp.ui.Drawer;
 import com.tsp.ui.EmptyDrawer;
+import com.tsp.utils.XmlUtils;
 
 public class Main {
 
@@ -44,7 +52,6 @@ public class Main {
     public static void main(String[] argc) {
         final Algorithm algorithm = ALGORITHMS.get(ALGO_SIMPLE);
         final Drawer drawer = new EmptyDrawer();
-        final PathFactory factory = new RoundedFactory();
 
         final ComputationCallback drawCallback = new ComputationCallback() {
 
@@ -64,10 +71,10 @@ public class Main {
                     for (String problem : XML_NAMES) {
                         final CompoundSolver compoundSolver = new CompoundSolver();
                         final TSPInstance tsp = TSPInstance.fromXml(problem);
-                        // for (PathFactory factory : getFactoriesFor(problem))
-                        // {
-                        compoundSolver.add(new SimpleSolver(tsp, algorithm, drawCallback, factory));
-                        // }
+                        for (PathFactory factory : getFactoriesFor(problem)) {
+                            compoundSolver.add(new SimpleSolver(tsp, algorithm, drawCallback,
+                                    factory));
+                        }
                         final SolverResult result = compoundSolver.solve();
                         System.out.println(String.format(FORMAT, tsp.getName(), result.getCost(),
                                 result.getEps(), result.getTime()));
@@ -79,6 +86,24 @@ public class Main {
             }
 
         }).start();
+    }
+
+    private static Iterable<PathFactory> getFactoriesFor(String problem)
+            throws FileNotFoundException {
+        final Collection<PathFactory> pathes = new ArrayList<PathFactory>();
+        final Scanner scanner = new Scanner(new File(XmlUtils.permutationForName(problem)));
+        while (scanner.hasNextLine()) {
+            final String line = scanner.nextLine();
+            final String[] values = line.split(" ");
+            final int size = values.length;
+            final List<Integer> permutation = new ArrayList<Integer>(size);
+            for (int i = 0; i < size; i++) {
+                permutation.add(Integer.parseInt(values[i]));
+            }
+            pathes.add(new RoundedFactory(new DefinedPathFactory(permutation)));
+        }
+        scanner.close();
+        return pathes;
     }
 
 }

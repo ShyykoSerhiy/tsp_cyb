@@ -15,4 +15,8 @@ public final class XmlUtils {
         return "data/" + name + ".xml";
     }
 
+    public static String permutationForName(String name) {
+        return "data/" + name + "_permutations.txt";
+    }
+
 }

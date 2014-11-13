@@ -18,6 +18,10 @@ public class Path {
         data = new LinkedList<Integer>(from.data);
     }
 
+    /* package */Path(List<Integer> list) {
+        data = new LinkedList<Integer>(list);
+    }
+
     /* package */void add(int edge) {
         data.add(edge);
     }
@@ -37,6 +41,17 @@ public class Path {
     @Override
     public Path clone() {
         return new Path(this);
+    }
+
+    @Override
+    public String toString() {
+        final StringBuilder builder = new StringBuilder();
+        final int count = count();
+        for (int i = 0; i < count - 1; i++) {
+            builder.append("(" + edgeAt(i) + ")->");
+        }
+        builder.append("(" + edgeAt(count - 1) + ")");
+        return builder.toString();
     }
 
     public double cost(TSPInstance tsp) {

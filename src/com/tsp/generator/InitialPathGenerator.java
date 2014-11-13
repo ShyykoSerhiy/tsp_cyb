@@ -1,20 +1,23 @@
 package com.tsp.generator;
 
-import com.tsp.Main;
-import com.tsp.utils.XmlUtils;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.tsp.Main;
+import com.tsp.utils.XmlUtils;
 
 /**
  * Random path permutation generator
@@ -31,7 +34,7 @@ public class InitialPathGenerator {
             // get vertex count for given graph
             int vertexCount = getVertexCountInXml(xmlName);
             // generate and write permutations
-            PrintWriter writer = new PrintWriter(xmlName + "_permutations.txt", "UTF-8");
+            PrintWriter writer = new PrintWriter(XmlUtils.permutationForName(xmlName), "UTF-8");
             for (int i = 0; i < PERMUTATION_NUMBER; i++) {
                 writer.println(generatePermutationForVertexNumber(vertexCount));
             }
@@ -46,10 +49,10 @@ public class InitialPathGenerator {
             list.add(i);
         }
         // shuffle it
-        java.util.Collections.shuffle(list);
+        Collections.shuffle(list);
 
         // build a string from shuffled list
-        StringBuilder builder = new StringBuilder("");
+        StringBuilder builder = new StringBuilder();
         for (int i = 0; i < count; i++) {
             builder.append(String.valueOf(list.get(i)));
             builder.append(" ");
@@ -63,14 +66,13 @@ public class InitialPathGenerator {
         InputStream xmlStream = null;
         try {
             xmlStream = new FileInputStream(XmlUtils.xmlForName(xmlName));
-            final Document document = DocumentBuilderFactory.newInstance()
-                    .newDocumentBuilder().parse(xmlStream);
+            final Document document = DocumentBuilderFactory.newInstance().newDocumentBuilder()
+                    .parse(xmlStream);
             final Element rootElement = document.getDocumentElement();
 
-            final Element graphElement = (Element) rootElement
-                    .getElementsByTagName("graph").item(0);
-            final NodeList vertexList = graphElement
-                    .getElementsByTagName("vertex");
+            final Element graphElement = (Element) rootElement.getElementsByTagName("graph")
+                    .item(0);
+            final NodeList vertexList = graphElement.getElementsByTagName("vertex");
 
             return vertexList.getLength();
         } finally {
@@ -79,4 +81,5 @@ public class InitialPathGenerator {
             }
         }
     }
+
 }
