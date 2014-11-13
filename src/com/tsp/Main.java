@@ -80,7 +80,11 @@ public class Main {
                                 result.getEps(), result.getTime()));
                         // TODO use bestPath to fill the table sheets
                     }
-                } catch (SAXException | IOException | ParserConfigurationException e) {
+                } catch (SAXException e) {
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } catch (ParserConfigurationException e) {
                     e.printStackTrace();
                 }
             }
