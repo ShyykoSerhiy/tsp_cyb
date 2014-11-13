@@ -27,7 +27,7 @@ public class InitialPathGenerator {
     public static void main(String[] argc) throws ParserConfigurationException, SAXException,
             IOException {
         // iterate through all xmls and generate random permutations for them
-        for (String xmlName : Main.xmlNames) {
+        for (String xmlName : Main.XML_NAMES) {
             // get vertex count for given graph
             int vertexCount = getVertexCountInXml(xmlName);
             // generate and write permutations

@@ -1,4 +1,4 @@
-package com.tsp.algorithm.simple;
+package com.tsp.algorithm.lds;
 
 import com.tsp.algorithm.Algorithm;
 import com.tsp.model.TSPInstance;
@@ -26,8 +26,9 @@ public class LocalDeterminedSearch implements Algorithm {
             pathChanged = false;
             // going through all the points in path
             for (int i = 0; i < Math.max(count - PARAM_P, 1) && !pathChanged; i++) {
-                // and trying to swap with points that are no further than PARAM_P from current
-                delta_left = i + 1;//optimized from Math.max(i - PARAM_P, 0);
+                // and trying to swap with points that are no further than
+                // PARAM_P from current
+                delta_left = i + 1;// optimized from Math.max(i - PARAM_P, 0);
                 delta_right = Math.min(i + PARAM_P, count - 1);
                 for (int j = delta_left; j <= delta_right && !pathChanged; j++) {
                     if (i == j) {
@@ -41,7 +42,8 @@ public class LocalDeterminedSearch implements Algorithm {
                     if (copyCost < cost) {
                         // update cost if found better
                         cost = copyCost;
-                        // also change the path itself to operate with updated one on next step
+                        // also change the path itself to operate with updated
+                        // one on next step
                         path = copy;
                         pathChanged = true;
                     }
