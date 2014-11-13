@@ -10,20 +10,29 @@ public class Path {
 
     private final List<Integer> data;
 
-    /* package */Path() {
+    public Path() {
         data = new LinkedList<Integer>();
     }
 
-    /* package */Path(Path from) {
+    public Path(Path from) {
         data = new LinkedList<Integer>(from.data);
     }
 
-    /* package */Path(List<Integer> list) {
+    public Path(List<Integer> list) {
         data = new LinkedList<Integer>(list);
     }
 
-    /* package */void add(int edge) {
+    public void add(int edge) {
         data.add(edge);
+    }
+
+    /**
+     * Insert edge into path
+     * @param place position into which element will be inserted
+     * @param edge vertex number
+     */
+    public void insert(int place, int edge) {
+        data.add(place, edge);
     }
 
     public void swap(int firstIndex, int secondIndex) {
