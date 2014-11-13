@@ -1,7 +1,5 @@
 package com.tsp.solver;
 
-import sun.java2d.pipe.SolidTextRenderer;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
