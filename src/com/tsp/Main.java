@@ -17,6 +17,9 @@ import org.xml.sax.SAXException;
 import com.tsp.algorithm.Algorithm;
 import com.tsp.algorithm.Algorithm.ComputationCallback;
 import com.tsp.algorithm.lds.LocalDeterminedSearch;
+import com.tsp.algorithm.sa.OneByNSequence;
+import com.tsp.algorithm.sa.PowSequence;
+import com.tsp.algorithm.sa.SimulatedAnnealingAlgorithm;
 import com.tsp.algorithm.simple.SimpleAlgorithm;
 import com.tsp.model.TSPInstance;
 import com.tsp.model.path.DefinedPathFactory;
@@ -40,17 +43,20 @@ public class Main {
 
     private final static String ALGO_SIMPLE = "simple";
     private final static String ALGO_LOCAL_DETERMINED_SEARCH = "lds";
+    private final static String ALGO_SIMULATED_ANNEALING = "sa";
 
     // all algorithms available
     private final static Map<String, Algorithm> ALGORITHMS = new HashMap<String, Algorithm>() {
         {
             put(ALGO_SIMPLE, new SimpleAlgorithm());
-            put(ALGO_LOCAL_DETERMINED_SEARCH, new LocalDeterminedSearch());
+            put(ALGO_LOCAL_DETERMINED_SEARCH, new LocalDeterminedSearch(5));
+            put(ALGO_SIMULATED_ANNEALING, new SimulatedAnnealingAlgorithm(5, Math.E,
+                    new PowSequence(new OneByNSequence(), 0.0001)));
         }
     };
 
     public static void main(String[] argc) {
-        final Algorithm algorithm = ALGORITHMS.get(ALGO_SIMPLE);
+        final Algorithm algorithm = ALGORITHMS.get(ALGO_SIMULATED_ANNEALING);
         final Drawer drawer = new EmptyDrawer();
 
         final ComputationCallback drawCallback = new ComputationCallback() {

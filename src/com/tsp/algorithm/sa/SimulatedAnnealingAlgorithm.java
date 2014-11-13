@@ -1,29 +1,36 @@
-package com.tsp.algorithm.lds;
+package com.tsp.algorithm.sa;
 
 import com.tsp.algorithm.Algorithm;
 import com.tsp.model.TSPInstance;
 import com.tsp.model.path.Path;
+import com.tsp.utils.RandomUtils;
 
-/**
- * local determined search algorithm as it was defined on original lectures.
- */
-public class LocalDeterminedSearch implements Algorithm {
+public class SimulatedAnnealingAlgorithm implements Algorithm {
+
     // maximum length between points that can be swapped
     // can be tweaked to optimize algorithm
     private static final int PARAM_P = 1;
 
     private final int paramP;
+    private final double eps;
+    private final Sequence sequence;
 
-    public LocalDeterminedSearch() {
-        this(PARAM_P);
+    public SimulatedAnnealingAlgorithm() {
+        this(PARAM_P, Math.E, new OneByNSequence());
     }
 
-    public LocalDeterminedSearch(int paramP) {
+    public SimulatedAnnealingAlgorithm(int paramP, double eps, Sequence sequence) {
         if (paramP <= 0) {
             throw new IllegalArgumentException(
-                    "In LDS input argument should be possible. Input param: " + paramP);
+                    "In SA input argument paramP should be possible. Input paramP: " + paramP);
+        }
+        if (eps <= 0) {
+            throw new IllegalArgumentException(
+                    "In SA input argument eps should be possible. Input eps: " + eps);
         }
         this.paramP = paramP;
+        this.eps = eps;
+        this.sequence = sequence;
     }
 
     @Override
@@ -35,6 +42,7 @@ public class LocalDeterminedSearch implements Algorithm {
                             + ", paramP = " + paramP);
         }
         Path path = beginPath;
+        int index = 0;
         // calculate path's cost
         double cost = path.cost(tsp);
         boolean pathChanged = true;
@@ -56,7 +64,10 @@ public class LocalDeterminedSearch implements Algorithm {
                         // swap two points in path and measure cost
                         copy.swap(i, j);
                         final double copyCost = copy.cost(tsp);
-                        if (copyCost < cost) {
+                        final double delta = copyCost - cost;
+                        if (delta < 0
+                                || (delta > 0 && RandomUtils.isInRange(Math.pow(eps, -delta
+                                        / sequence.valueAt(index))))) {
                             // update cost if found better
                             cost = copyCost;
                             // also change the path itself to operate with
@@ -65,6 +76,7 @@ public class LocalDeterminedSearch implements Algorithm {
                             pathChanged = true;
                             callback.onComputation(tsp, path);
                         }
+                        index++;
                     }
                 }
             }
