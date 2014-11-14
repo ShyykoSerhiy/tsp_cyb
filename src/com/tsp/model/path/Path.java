@@ -71,4 +71,27 @@ public class Path {
         }
         return cost;
     }
+
+    /**
+     * Reverses the order in which the nodes are visited between the two
+     * specified indices.  The first index defines the start of the
+     * reverse operation; the second index defines the stopping position.
+     * Tours are cyclic, so the reverse operation, when the second index is less
+     * than the first, gets wrapped around the end of the array.  The indices
+     * are inclusive.
+     *
+     * @param i the first index, or starting index
+     * @param j the second index, or stopping index
+     */
+    public void reverse(int i, int j) {
+        while (j < i) {
+            j += data.size();
+        }
+
+        for (int k = 0; k < (j - i + 1) / 2; k++) {
+            int temp = data.get(i+k);
+            data.set(i+k, data.get(j-k));
+            data.set(j-k, temp);
+        }
+    }
 }

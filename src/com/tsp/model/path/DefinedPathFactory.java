@@ -18,7 +18,7 @@ public class DefinedPathFactory implements PathFactory {
 
     @Override
     public Path create(TSPInstance tsp) {
-        return path;
+        return path.clone();
     }
 
 }

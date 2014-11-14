@@ -13,6 +13,8 @@ import java.util.Scanner;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.tsp.algorithm.greedy.GreedyAlgorithm;
+import com.tsp.algorithm.opt2.TSP2OptHeuristic;
+import com.tsp.model.path.*;
 import org.xml.sax.SAXException;
 
 import com.tsp.algorithm.Algorithm;
@@ -23,10 +25,6 @@ import com.tsp.algorithm.sa.PowSequence;
 import com.tsp.algorithm.sa.SimulatedAnnealingAlgorithm;
 import com.tsp.algorithm.simple.SimpleAlgorithm;
 import com.tsp.model.TSPInstance;
-import com.tsp.model.path.DefinedPathFactory;
-import com.tsp.model.path.Path;
-import com.tsp.model.path.PathFactory;
-import com.tsp.model.path.RoundedFactory;
 import com.tsp.solver.CompoundSolver;
 import com.tsp.solver.SimpleSolver;
 import com.tsp.solver.SolverResult;
@@ -46,6 +44,8 @@ public class Main {
     private final static String ALGO_LOCAL_DETERMINED_SEARCH = "lds";
     private final static String ALGO_SIMULATED_ANNEALING = "sa";
     private final static String ALGO_GREEDY = "greedy";
+    private final static String ALGO_GA = "genetic";
+    private final static String ALGO_2OPT = "tsp2opt";
 
     // all algorithms available
     private final static Map<String, Algorithm> ALGORITHMS = new HashMap<String, Algorithm>() {
@@ -55,6 +55,7 @@ public class Main {
             put(ALGO_SIMULATED_ANNEALING, new SimulatedAnnealingAlgorithm(5, Math.E,
                     new PowSequence(new OneByNSequence(), 0.0001)));
             put(ALGO_GREEDY, new GreedyAlgorithm());
+            put(ALGO_2OPT, new TSP2OptHeuristic(5));
         }
     };
 
